@@ -5,34 +5,29 @@
 	<meta name="viewport" content="width=device-width,initial-scale=1" />
 	<title>Fake-Dia PWA Demo</title>
 	<link rel="manifest" href="manifest.json">
-	<style>
-		body{font-family:system-ui,Segoe UI,Arial;margin:0;padding:1rem;background:#f5f7fb;color:#111}
-		.card{max-width:520px;margin:1rem auto;padding:1rem;background:#fff;border-radius:10px;box-shadow:0 6px 18px rgba(0,0,0,.08)}
-		img#photo{width:120px;height:120px;object-fit:cover;border-radius:8px;border:1px solid #ddd}
-		label{display:block;margin-top:.6rem}
-		.center{display:flex;gap:1rem;align-items:center}
-		.hidden{display:none}
-		.notice{background:#fff3cd;border:1px solid #ffeeba;padding:.6rem;border-radius:6px;color:#856404}
-		.btn{background:#0066ff;color:white;padding:.5rem .8rem;border-radius:6px;border:none;cursor:pointer}
-	</style>
+	<link rel="stylesheet" href="styles.css">
 </head>
 <body>
 	<div class="card hidden" id="installNotice">
 		<div class="notice">
 			Ця сторінка працює краще як програма. Додайте на головний екран (через меню ⋮ → "Додати на головний екран").
-			<div style="margin-top:.5rem"><button id="installBtn" class="btn hidden">Встановити</button></div>
+			<div style="margin-top:.5rem"><button id="installBtn" class="btn btn--primary hidden">Встановити</button></div>
 		</div>
 	</div>
 
 	<div class="card hidden" id="mainUI">
-		<h2 id="title">Fake-Dia — демо</h2>
+		<div class="header">
+			<h2 id="title">Fake-Dia — демо</h2>
+		</div>
 
 		<div id="locked">
 			<p>Вам потрібен код, який дає бот. Якщо у вас є посилання від бота, воно може містити код у параметрі <code>?code=XXXX</code>.</p>
 			<label>Введіть код, щоб розблокувати:</label>
 			<div class="center">
 				<input id="codeInput" placeholder="Введіть код" />
-				<button id="unlock" class="btn">Розблокувати</button>
+				<div class="controls">
+					<button id="unlock" class="btn btn--primary">Розблокувати</button>
+				</div>
 			</div>
 			<p style="margin-top:.6rem;font-size:.9rem;color:#555">Або відкрийте посилання, яке надіслав бот.</p>
 		</div>
@@ -42,23 +37,84 @@
 				<img id="photo" src="" alt="photo" />
 				<div style="flex:1">
 					<label>Завантажити фото</label>
+					<label for="file" class="file-label" id="fileLabel">Оберіть файл</label>
 					<input id="file" type="file" accept="image/*">
 					<label>Дата народження</label>
 					<input id="bdate" type="date">
 				</div>
 			</div>
 			<hr>
-			<h3>Псевдо-ID</h3>
-			<div id="card">
-				<p><strong>Ім'я:</strong> <span id="name">Пранк Юзер</span></p>
-				<p><strong>Дата народження:</strong> <span id="showBdate">—</span></p>
+			<h3 class="visually-hidden">Псевдо-ID</h3>
+			<div class="doc-carousel" id="docCarousel">
+				<div class="doc-track" id="docTrack">
+					<div class="doc-card" data-doc="passport:014678905">
+				<div class="doc-inner">
+					<div class="doc-header">
+						<div class="doc-title">Паспорт громадянина України</div>
+						<button id="docMore" class="more-btn" aria-label="Меню документа">⋯</button>
+					</div>
+					<div class="doc-body">
+						<div class="doc-photo-wrap"><img id="photo" src="" alt="photo"/></div>
+						<div class="doc-info">
+							<div class="doc-field"><div class="doc-field-label">Дата народження:</div><div class="doc-field-value" id="showBdate">—</div></div>
+							<div class="doc-field"><div class="doc-field-label">Номер:</div><div class="doc-field-value" id="docNumber">014678905</div></div>
+						</div>
+					</div>
+					<div class="doc-update">15.12.2025 • Документ оновлено 15.12.2025</div>
+					<div class="doc-names">
+						<div class="doc-name-line" id="nameLine1">Сивоус</div>
+						<div class="doc-name-line" id="nameLine2">Павло</div>
+						<div class="doc-name-line" id="nameLine3">Володимирович</div>
+					</div>
+				</div>
+				<div class="doc-card" data-doc="driver:BT-998877">
+					<div class="doc-inner">
+						<div class="doc-header">
+							<div class="doc-title">Дія.Картка</div>
+							<button class="more-btn" aria-label="Меню документа">⋯</button>
+						</div>
+						<div class="doc-body">
+							<div class="doc-photo-wrap"><img src="" alt="card"/></div>
+							<div class="doc-info">
+								<div class="doc-field"><div class="doc-field-label">Тип:</div><div class="doc-field-value">Картка</div></div>
+								<div class="doc-field"><div class="doc-field-label">Статус:</div><div class="doc-field-value">Активний</div></div>
+							</div>
+						</div>
+						<div class="doc-update">Оновлено 01.12.2025</div>
+						<div class="doc-names"><div class="doc-name-line">Сивоус</div><div class="doc-name-line">Павло</div></div>
+					</div>
+				</div>
+				<div class="doc-card" data-doc="id:77889900">
+					<div class="doc-inner">
+						<div class="doc-header"><div class="doc-title">Інший документ</div><button class="more-btn">⋯</button></div>
+						<div class="doc-body"><div class="doc-photo-wrap"><img src="" alt="doc"/></div><div class="doc-info"><div class="doc-field"><div class="doc-field-label">Тип:</div><div class="doc-field-value">Інше</div></div></div></div>
+						<div class="doc-update">Оновлено 02.11.2025</div>
+						<div class="doc-names"><div class="doc-name-line">Петренко</div><div class="doc-name-line">Ігор</div></div>
+					</div>
+				</div>
 			</div>
-			<div style="margin-top:1rem">
-				<button id="save" class="btn">Зберегти (localStorage)</button>
-				<button id="reset" class="btn" style="background:#888;margin-left:.5rem">Скинути</button>
+			<div class="page-dots" aria-hidden="true" id="docDots"></div>
+		</div>
+
+		<!-- QR modal -->
+		<div id="qrModal" class="modal hidden" role="dialog" aria-modal="true">
+			<div class="modal-backdrop" id="modalBackdrop"></div>
+			<div class="modal-content" role="document">
+				<button id="qrClose" class="modal-close" aria-label="Закрити">✕</button>
+				<h3 id="qrTitle">QR кюар</h3>
+				<div id="qrTimer" class="qr-timer" aria-live="polite">Код діятиме ще 3:00 хв</div>
+				<div id="qrImageWrap"><img id="qrImage" src="" alt="QR code"/></div>
+				<div class="modal-actions"><button id="qrCopy" class="btn btn--secondary">Копіювати</button></div>
+			</div>
+		</div>
+			<div style="margin-top:1rem" class="controls">
+				<button id="save" class="btn btn--primary">ЗБЕРЕГТИ (localStorage)</button>
+				<button id="reset" class="btn btn--secondary">Скинути</button>
 			</div>
 		</div>
 	</div>
+
+	<div id="toast" class="toast" role="status" aria-live="polite"></div>
 
 	<script>
 		// Прості допоміжні функції
@@ -77,15 +133,18 @@
 
 		unlock.addEventListener('click', ()=>{
 			const val = codeInput.value.trim();
-			if(!val) return alert('Введіть код');
+			if(!val) return showToast('Введіть код');
 			// Простий чек — збігається з параметром або збереженим ключем
 			if(expected){
 				if(val === expected) showApp(); else alert('Код не вірний');
 			} else {
 				// Локальний режим для тесту: будь‑який код "0000" відкриває
-				if(val === '0000') showApp(); else alert('Код не вірний — використайте 0000 для локального тесту');
+				if(val === '0000') showApp(); else showToast('Код не вірний — використайте 0000 для локального тесту');
 			}
 		});
+
+	// allow Enter key on code input
+	codeInput.addEventListener('keydown', (e)=>{ if(e.key === 'Enter') unlock.click(); });
 
 		// Photo + date handling
 		const file = document.getElementById('file');
@@ -97,7 +156,9 @@
 
 		file.addEventListener('change', e=>{
 			const f = e.target.files[0];
-			if(!f) return;
+			const fileLabel = document.getElementById('fileLabel');
+			if(!f){ fileLabel.textContent = 'Оберіть файл'; return; }
+			fileLabel.textContent = f.name;
 			const url = URL.createObjectURL(f);
 			photo.src = url;
 			localStorage.setItem('fake_photo', url);
@@ -105,14 +166,16 @@
 		bdate.addEventListener('change', ()=> showBdate.textContent = bdate.value || '—');
 		save.addEventListener('click', ()=>{
 			localStorage.setItem('fake_bdate', bdate.value);
-			alert('Збережено локально');
+			showToast('Збережено локально');
 		});
 		reset.addEventListener('click', ()=>{
+			if(!confirm('Ви впевнені, що хочете скинути збережені дані?')) return;
 			localStorage.removeItem('fake_photo');
 			localStorage.removeItem('fake_bdate');
 			photo.src = '';
 			bdate.value = '';
 			showBdate.textContent = '—';
+			showToast('Дані скинуті');
 		});
 
 		// Load saved
@@ -122,6 +185,16 @@
 			if(p) photo.src = p;
 			if(d){ bdate.value = d; showBdate.textContent = d; }
 		});
+
+		// simple toast helper
+		const toastEl = document.getElementById('toast');
+		function showToast(txt, ms = 2200){
+			if(!toastEl) return alert(txt);
+			toastEl.textContent = txt;
+			toastEl.classList.add('show');
+			clearTimeout(window._toastTimer);
+			window._toastTimer = setTimeout(()=> toastEl.classList.remove('show'), ms);
+		}
 
 		// PWA install prompt handling
 		let deferredPrompt;
@@ -167,6 +240,93 @@
 		if('serviceWorker' in navigator){
 			navigator.serviceWorker.register('service-worker.js').catch(()=>{});
 		}
+
+		// --- Carousel and QR logic ---
+		(function(){
+			const track = document.getElementById('docTrack');
+			const dotsWrap = document.getElementById('docDots');
+			const cards = Array.from(track.querySelectorAll('.doc-card'));
+			let active = 0;
+			// build dots
+			cards.forEach((c,i)=>{
+				const dot = document.createElement('span'); dot.className='dot'+(i===0?' active':''); dotsWrap.appendChild(dot);
+				dot.addEventListener('click', ()=>{ scrollToIndex(i) });
+				c.addEventListener('click', (e)=>{ if(e.target.closest('.more-btn')) return; openQRFor(c.dataset.doc || ('doc:'+i)); });
+			});
+
+			function scrollToIndex(i){
+				const card = cards[i]; if(!card) return; card.scrollIntoView({behavior:'smooth',inline:'center'}); setActive(i);
+			}
+
+			function setActive(i){
+				active = i; Array.from(dotsWrap.children).forEach((d,idx)=> d.classList.toggle('active', idx===i));
+			}
+
+			// update active on scroll with debounce
+			let rAF;
+			track.addEventListener('scroll', ()=>{
+				if(rAF) cancelAnimationFrame(rAF);
+				rAF = requestAnimationFrame(()=>{
+					const center = track.scrollLeft + track.clientWidth/2;
+					let closest=0, dist=1e9;
+					cards.forEach((c,i)=>{
+						const rect = c.getBoundingClientRect();
+						const trackRect = track.getBoundingClientRect();
+						const cCenter = (rect.left - trackRect.left) + rect.width/2 + track.scrollLeft;
+						const d = Math.abs(cCenter - center);
+						if(d < dist){ dist = d; closest = i }
+					});
+					setActive(closest);
+				});
+			});
+
+			// QR modal
+			const qrModal = document.getElementById('qrModal');
+			const qrImage = document.getElementById('qrImage');
+			const qrTitle = document.getElementById('qrTitle');
+			const qrClose = document.getElementById('qrClose');
+			const modalBackdrop = document.getElementById('modalBackdrop');
+			const qrCopy = document.getElementById('qrCopy');
+
+			function startQrTimer(seconds){
+				clearInterval(window._qrTimerInterval);
+				const el = document.getElementById('qrTimer');
+				if(!el) return;
+				let remaining = Math.max(0, Math.floor(seconds));
+				function format(s){
+					const mm = Math.floor(s/60).toString().padStart(1,'0');
+					const ss = (s%60).toString().padStart(2,'0');
+					return `${mm}:${ss}`;
+				}
+				el.textContent = 'Код діятиме ще ' + format(remaining) + ' хв';
+				window._qrTimerInterval = setInterval(()=>{
+					remaining--;
+					if(remaining < 0){ clearInterval(window._qrTimerInterval); el.textContent = 'Код більше не дійсний'; return; }
+					el.textContent = 'Код діятиме ще ' + format(remaining) + ' хв';
+				}, 1000);
+			}
+
+			function openQRFor(idOrSrc, ttlSeconds = 180){
+				qrTitle.textContent = 'QR для документу';
+				// detect if idOrSrc looks like a URL/data/blob or plain id string
+				if(typeof idOrSrc === 'string' && (idOrSrc.startsWith('http') || idOrSrc.startsWith('data:') || idOrSrc.startsWith('blob:') )){
+					qrImage.src = idOrSrc; qrImage.setAttribute('data-src', idOrSrc);
+				} else {
+					const text = (typeof idOrSrc === 'string' && idOrSrc.length>0) ? idOrSrc : ('doc:'+ (idOrSrc||''));
+					const src = 'https://chart.googleapis.com/chart?chs=400x400&cht=qr&chl='+encodeURIComponent(text);
+					qrImage.src = src; qrImage.setAttribute('data-src', text);
+				}
+				startQrTimer(ttlSeconds);
+				qrModal.classList.remove('hidden');
+			}
+
+			qrClose.addEventListener('click', ()=>{ qrModal.classList.add('hidden'); clearInterval(window._qrTimerInterval); });
+			modalBackdrop.addEventListener('click', ()=>{ qrModal.classList.add('hidden'); clearInterval(window._qrTimerInterval); });
+			qrCopy.addEventListener('click', async ()=>{
+				const txt = qrImage.getAttribute('data-src')||''; try{ await navigator.clipboard.writeText(txt); showToast('Скопійовано'); }catch(e){ showToast('Не вдалося скопіювати'); }
+			});
+
+		})();
 	</script>
 </body>
 </html>
