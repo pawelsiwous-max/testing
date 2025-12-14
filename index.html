@@ -24,7 +24,7 @@
 		</div>
 	</div>
 
-	<div class="card">
+	<div class="card" id="mainUI">
 		<h2 id="title">Fake-Dia — демо</h2>
 
 		<div id="locked">
@@ -146,12 +146,21 @@
 		function isStandalone(){
 			return window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
 		}
-		if(!isStandalone()){
-			// show install hint
+
+		const mainUI = document.getElementById('mainUI');
+		if(isStandalone()){
+			// браузер тільки установка
 			installNotice.classList.remove('hidden');
+			mainUI.classList.add('hidden');
 		} else {
-			// Auto-unlock if code present and running as app
-			if(expected) showApp();
+			// додаток
+			installNotice.classList.add('hidden');
+			mainUI.classList.remove('hidden');
+
+			//якщо код уже є - одразу відкриваємо
+			if (expected) {
+				showApp();
+			}
 		}
 
 		// Register service worker
