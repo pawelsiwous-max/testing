@@ -17,7 +17,7 @@
 	</style>
 </head>
 <body>
-	<div class="card" id="installNotice" class="hidden">
+	<div class="card hidden" id="installNotice">
 		<div class="notice">
 			Ця сторінка працює краще як програма. Додайте на головний екран (через меню ⋮ → "Додати на головний екран").
 			<div style="margin-top:.5rem"><button id="installBtn" class="btn hidden">Встановити</button></div>
@@ -148,7 +148,7 @@
 		}
 
 		const mainUI = document.getElementById('mainUI');
-		if(isStandalone()){
+		if(!isStandalone()) {
 			// браузер тільки установка
 			installNotice.classList.remove('hidden');
 			mainUI.classList.add('hidden');
