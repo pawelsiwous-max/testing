@@ -1,4 +1,4 @@
-const CACHE = 'fake-dia-v3';
+const CACHE = 'fake-dia-v4';
 const OFFLINE = [
   './',
   './index.html',
