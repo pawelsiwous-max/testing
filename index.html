@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="uk">
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width,initial-scale=1" />
+	<title>Fake-Dia PWA Demo</title>
+	<link rel="manifest" href="manifest.json">
+	<style>
+		body{font-family:system-ui,Segoe UI,Arial;margin:0;padding:1rem;background:#f5f7fb;color:#111}
+		.card{max-width:520px;margin:1rem auto;padding:1rem;background:#fff;border-radius:10px;box-shadow:0 6px 18px rgba(0,0,0,.08)}
+		img#photo{width:120px;height:120px;object-fit:cover;border-radius:8px;border:1px solid #ddd}
+		label{display:block;margin-top:.6rem}
+		.center{display:flex;gap:1rem;align-items:center}
+		.hidden{display:none}
+		.notice{background:#fff3cd;border:1px solid #ffeeba;padding:.6rem;border-radius:6px;color:#856404}
+		.btn{background:#0066ff;color:white;padding:.5rem .8rem;border-radius:6px;border:none;cursor:pointer}
+	</style>
+</head>
+<body>
+	<div class="card" id="installNotice" class="hidden">
+		<div class="notice">
+			Ця сторінка працює краще як програма. Додайте на головний екран (через меню ⋮ → "Додати на головний екран").
+			<div style="margin-top:.5rem"><button id="installBtn" class="btn hidden">Встановити</button></div>
+		</div>
+	</div>
+
+	<div class="card">
+		<h2 id="title">Fake-Dia — демо</h2>
+
+		<div id="locked">
+			<p>Вам потрібен код, який дає бот. Якщо у вас є посилання від бота, воно може містити код у параметрі <code>?code=XXXX</code>.</p>
+			<label>Введіть код, щоб розблокувати:</label>
+			<div class="center">
+				<input id="codeInput" placeholder="Введіть код" />
+				<button id="unlock" class="btn">Розблокувати</button>
+			</div>
+			<p style="margin-top:.6rem;font-size:.9rem;color:#555">Або відкрийте посилання, яке надіслав бот.</p>
+		</div>
+
+		<div id="app" class="hidden">
+			<div class="center">
+				<img id="photo" src="" alt="photo" />
+				<div style="flex:1">
+					<label>Завантажити фото</label>
+					<input id="file" type="file" accept="image/*">
+					<label>Дата народження</label>
+					<input id="bdate" type="date">
+				</div>
+			</div>
+			<hr>
+			<h3>Псевдо-ID</h3>
+			<div id="card">
+				<p><strong>Ім'я:</strong> <span id="name">Пранк Юзер</span></p>
+				<p><strong>Дата народження:</strong> <span id="showBdate">—</span></p>
+			</div>
+			<div style="margin-top:1rem">
+				<button id="save" class="btn">Зберегти (localStorage)</button>
+				<button id="reset" class="btn" style="background:#888;margin-left:.5rem">Скинути</button>
+			</div>
+		</div>
+	</div>
+
+	<script>
+		// Прості допоміжні функції
+		const qs = (k)=> new URLSearchParams(location.search).get(k);
+		const expected = qs('code');
+
+		const locked = document.getElementById('locked');
+		const app = document.getElementById('app');
+		const codeInput = document.getElementById('codeInput');
+		const unlock = document.getElementById('unlock');
+
+		function showApp(){ locked.classList.add('hidden'); app.classList.remove('hidden'); }
+
+		// Якщо в URL є код — префіл та автодоступ
+		if(expected){ codeInput.value = expected; }
+
+		unlock.addEventListener('click', ()=>{
+			const val = codeInput.value.trim();
+			if(!val) return alert('Введіть код');
+			// Простий чек — збігається з параметром або збереженим ключем
+			if(expected){
+				if(val === expected) showApp(); else alert('Код не вірний');
+			} else {
+				// Локальний режим для тесту: будь‑який код "0000" відкриває
+				if(val === '0000') showApp(); else alert('Код не вірний — використайте 0000 для локального тесту');
+			}
+		});
+
+		// Photo + date handling
+		const file = document.getElementById('file');
+		const photo = document.getElementById('photo');
+		const bdate = document.getElementById('bdate');
+		const showBdate = document.getElementById('showBdate');
+		const save = document.getElementById('save');
+		const reset = document.getElementById('reset');
+
+		file.addEventListener('change', e=>{
+			const f = e.target.files[0];
+			if(!f) return;
+			const url = URL.createObjectURL(f);
+			photo.src = url;
+			localStorage.setItem('fake_photo', url);
+		});
+		bdate.addEventListener('change', ()=> showBdate.textContent = bdate.value || '—');
+		save.addEventListener('click', ()=>{
+			localStorage.setItem('fake_bdate', bdate.value);
+			alert('Збережено локально');
+		});
+		reset.addEventListener('click', ()=>{
+			localStorage.removeItem('fake_photo');
+			localStorage.removeItem('fake_bdate');
+			photo.src = '';
+			bdate.value = '';
+			showBdate.textContent = '—';
+		});
+
+		// Load saved
+		window.addEventListener('load', ()=>{
+			const p = localStorage.getItem('fake_photo');
+			const d = localStorage.getItem('fake_bdate');
+			if(p) photo.src = p;
+			if(d){ bdate.value = d; showBdate.textContent = d; }
+		});
+
+		// PWA install prompt handling
+		let deferredPrompt;
+		const installNotice = document.getElementById('installNotice');
+		const installBtn = document.getElementById('installBtn');
+
+		window.addEventListener('beforeinstallprompt', (e)=>{
+			e.preventDefault();
+			deferredPrompt = e;
+			installNotice.classList.remove('hidden');
+			installBtn.classList.remove('hidden');
+		});
+		installBtn.addEventListener('click', async ()=>{
+			if(!deferredPrompt) return;
+			deferredPrompt.prompt();
+			const choice = await deferredPrompt.userChoice;
+			deferredPrompt = null;
+			installNotice.classList.add('hidden');
+		});
+
+		// If running as standalone show hint (some sites hide main menu unless standalone)
+		function isStandalone(){
+			return window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+		}
+		if(!isStandalone()){
+			// show install hint
+			installNotice.classList.remove('hidden');
+		} else {
+			// Auto-unlock if code present and running as app
+			if(expected) showApp();
+		}
+
+		// Register service worker
+		if('serviceWorker' in navigator){
+			navigator.serviceWorker.register('service-worker.js').catch(()=>{});
+		}
+	</script>
+</body>
+</html>
