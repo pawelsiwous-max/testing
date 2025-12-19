@@ -104,6 +104,16 @@
 				<h3 id="qrTitle">QR кюар</h3>
 				<div id="qrTimer" class="qr-timer" aria-live="polite">Код діятиме ще 3:00 хв</div>
 				<div id="qrImageWrap"><img id="qrImage" src="" alt="QR code"/></div>
+				<div class="qr-switch" role="tablist" aria-label="Формат коду">
+					<div class="qr-option active" data-kind="qr" role="button" tabindex="0">
+						<div style="width:28px;height:28px;border-radius:6px;display:grid;place-items:center;background:#000;color:#fff">◻️</div>
+						<span>QR-код</span>
+					</div>
+					<div class="qr-option" data-kind="barcode" role="button" tabindex="0">
+						<div style="width:28px;height:28px;border-radius:6px;display:grid;place-items:center;background:#eee;color:#111">▮▮▮</div>
+						<span>Штрих-код</span>
+					</div>
+				</div>
 				<div class="modal-actions"><button id="qrCopy" class="btn btn--secondary">Копіювати</button></div>
 			</div>
 		</div>
@@ -115,6 +125,15 @@
 	</div>
 
 	<div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+	<!-- bottom navigation spacer for content -->
+	<div class="bottom-spacer"></div>
+	<footer class="bottom-nav" role="navigation" aria-label="Основна навігація">
+		<div class="nav-item"><div class="nav-icon">📜</div>Стрічка</div>
+		<div class="nav-item"><div class="nav-icon">🧾</div>Документи</div>
+		<div class="nav-item"><div class="nav-icon">⚡</div>Сервіси</div>
+		<div class="nav-item"><div class="nav-icon">👤</div>Меню</div>
+	</footer>
 
 	<script>
 		// Прості допоміжні функції
@@ -324,6 +343,28 @@
 			modalBackdrop.addEventListener('click', ()=>{ qrModal.classList.add('hidden'); clearInterval(window._qrTimerInterval); });
 			qrCopy.addEventListener('click', async ()=>{
 				const txt = qrImage.getAttribute('data-src')||''; try{ await navigator.clipboard.writeText(txt); showToast('Скопійовано'); }catch(e){ showToast('Не вдалося скопіювати'); }
+			});
+
+			// QR switch handling (QR / barcode)
+			const qrOptions = Array.from(document.querySelectorAll('.qr-option'));
+			qrOptions.forEach(opt=>{
+				opt.addEventListener('click', ()=>{
+					qrOptions.forEach(o=>o.classList.remove('active'));
+					opt.classList.add('active');
+					const kind = opt.dataset.kind;
+					if(kind === 'barcode'){
+						// show a simple barcode image placeholder
+						qrImage.src = 'data:image/svg+xml;utf8,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="400" height="200"><rect width="100%" height="100%" fill="#fff"/><g fill="#000"><rect x="20" y="20" width="8" height="160"/><rect x="40" y="20" width="4" height="160"/><rect x="60" y="20" width="12" height="160"/><rect x="84" y="20" width="6" height="160"/></g></svg>');
+						qrImage.setAttribute('data-src','barcode:example');
+					} else {
+						// restore last QR (or default)
+						const last = qrImage.getAttribute('data-src') || 'doc:unknown';
+						if(last && !last.startsWith('http') && !last.startsWith('data:') && !last.startsWith('barcode:')){
+							const src = 'https://chart.googleapis.com/chart?chs=400x400&cht=qr&chl='+encodeURIComponent(last);
+							qrImage.src = src;
+						}
+					}
+				});
 			});
 
 		})();
