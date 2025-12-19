@@ -81,6 +81,12 @@ hr{border:0;border-top:1px solid #eef2ff;margin:1rem 0}
 .doc-track::-webkit-scrollbar{display:none}
 .doc-card{min-width:86%;flex:0 0 86%;scroll-snap-align:center}
 
+/* entry animations for carousel cards */
+.doc-card.enter-left{animation:enterFromRight .38s ease both}
+.doc-card.enter-right{animation:enterFromLeft .38s ease both}
+@keyframes enterFromRight{from{transform:translateX(8%);opacity:0}to{transform:none;opacity:1}}
+@keyframes enterFromLeft{from{transform:translateX(-8%);opacity:0}to{transform:none;opacity:1}}
+
 /* Modal (QR) */
 .modal{position:fixed;inset:0;display:grid;place-items:center;z-index:9998}
 .modal.hidden{display:none}
@@ -95,6 +101,11 @@ hr{border:0;border-top:1px solid #eef2ff;margin:1rem 0}
 .qr-switch .qr-option.active{background:#000;color:#fff}
 .qr-switch .qr-option span{font-size:.92rem;color:var(--text)}
 .modal-actions{display:flex;justify-content:center;padding-top:.8rem}
+
+.services-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1rem}
+.service{background:linear-gradient(180deg,#f3fbff,#eef7ef);padding:1rem;border-radius:12px;display:flex;align-items:center;gap:.8rem;min-height:86px}
+.service .icon{width:44px;height:44px;border-radius:10px;background:#fff;display:grid;place-items:center}
+.service .label{font-weight:600}
 
 /* Bottom navigation */
 .bottom-nav{position:fixed;left:0;right:0;bottom:0;height:64px;background:#0b0b0b;color:#fff;display:flex;align-items:center;justify-content:space-around;z-index:9999}
