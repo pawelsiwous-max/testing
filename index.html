@@ -34,7 +34,7 @@
 
 		<div id="app" class="hidden">
 			<div class="center">
-				<img id="photo" src="" alt="photo" />
+				<img id="mainPhoto" src="" alt="photo" />
 				<div style="flex:1">
 					<label>Завантажити фото</label>
 					<label for="file" class="file-label" id="fileLabel">Оберіть файл</label>
@@ -54,7 +54,7 @@
 						<button id="docMore" class="more-btn" aria-label="Меню документа">⋯</button>
 					</div>
 					<div class="doc-body">
-						<div class="doc-photo-wrap"><img id="photo" src="" alt="photo"/></div>
+						<div class="doc-photo-wrap"><img src="" alt="photo"/></div>
 						<div class="doc-info">
 							<div class="doc-field"><div class="doc-field-label">Дата народження:</div><div class="doc-field-value" id="showBdate">—</div></div>
 							<div class="doc-field"><div class="doc-field-label">Номер:</div><div class="doc-field-value" id="docNumber">014678905</div></div>
@@ -148,7 +148,7 @@
 
 		// Photo + date handling
 		const file = document.getElementById('file');
-		const photo = document.getElementById('photo');
+		const photo = document.getElementById('mainPhoto');
 		const bdate = document.getElementById('bdate');
 		const showBdate = document.getElementById('showBdate');
 		const save = document.getElementById('save');
@@ -238,7 +238,7 @@
 
 		// Register service worker
 		if('serviceWorker' in navigator){
-			navigator.serviceWorker.register('service-worker.js').catch(()=>{});
+			navigator.serviceWorker.register('./sw.js').catch(()=>{});
 		}
 
 		// --- Carousel and QR logic ---
