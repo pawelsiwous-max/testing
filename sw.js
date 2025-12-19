@@ -1,4 +1,4 @@
-const CACHE_NAME = 'fake-dia-testandqr2';
+const CACHE_NAME = 'fake-dia-testandqr3';
 
 const FILES_TO_CACHE = [
   './',
