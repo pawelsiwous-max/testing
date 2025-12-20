@@ -77,6 +77,10 @@ hr{border:0;border-top:1px solid #eef2ff;margin:1rem 0}
 
 /* Pin keypad (lock screen) */
 .locked-screen{display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding:2.5rem 1rem 1rem;min-height:360px}
+/* Make lock overlay fullscreen so underlying app cannot be scrolled into view */
+#locked.locked-screen{position:fixed;inset:0;z-index:10000;background:linear-gradient(180deg,#cfe6f7 0%, #eaf6ee 60%, #fff7e6 100%);}
+
+body.no-scroll{overflow:hidden}
 .pin-title{font-size:1.6rem;font-weight:700;margin-bottom:1rem}
 .pin-dots{display:flex;gap:.6rem;margin-bottom:1.25rem}
 .pin-dots span{width:10px;height:10px;border-radius:50%;background:rgba(2,6,23,0.08);display:inline-block}

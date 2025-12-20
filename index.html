@@ -186,11 +186,16 @@
 			// show bottom navigation + spacer and default to Documents view
 			const bottom = document.querySelector('.bottom-nav'); if(bottom) bottom.classList.remove('hidden');
 			const spacer = document.querySelector('.bottom-spacer'); if(spacer) spacer.classList.remove('hidden');
+			// restore page scrolling and ensure view is at top
+			document.body.classList.remove('no-scroll');
+			window.scrollTo(0,0);
 			showView('docs');
 		}
 
 		// Якщо в URL є код — префіл та автодоступ
 		if(expected){ codeInput.value = expected; }
+		// if there's no immediate expected code, keep body non-scrollable while lock overlay is visible
+		if(!expected){ document.body.classList.add('no-scroll'); }
 
 		// Pin keypad logic: accept any digits — unlock after entering 4 digits
 		const pinDots = document.getElementById('pinDots');
