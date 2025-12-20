@@ -20,16 +20,25 @@
 			<h2 id="title">Fake-Dia</h2>
 		</div>
 
-		<div id="locked">
-			<p>Вам потрібен код, який дає бот. Якщо у вас є посилання від бота, воно може містити код у параметрі <code>?code=XXXX</code>.</p>
-			<label>Введіть код, щоб розблокувати:</label>
-			<div class="center">
-				<input id="codeInput" placeholder="Введіть код" />
-				<div class="controls">
-					<button id="unlock" class="btn btn--primary">Розблокувати</button>
-				</div>
+		<div id="locked" class="locked-screen">
+			<h2 class="pin-title">Код для входу</h2>
+			<div class="pin-dots" id="pinDots"><span></span><span></span><span></span><span></span></div>
+			<div class="pin-pad" id="pinPad">
+				<div class="pin-btn" data-digit="1">1</div>
+				<div class="pin-btn" data-digit="2">2</div>
+				<div class="pin-btn" data-digit="3">3</div>
+				<div class="pin-btn" data-digit="4">4</div>
+				<div class="pin-btn" data-digit="5">5</div>
+				<div class="pin-btn" data-digit="6">6</div>
+				<div class="pin-btn" data-digit="7">7</div>
+				<div class="pin-btn" data-digit="8">8</div>
+				<div class="pin-btn" data-digit="9">9</div>
+				<div class="pin-row-space"></div>
+				<div class="pin-btn" data-digit="0">0</div>
+				<div class="pin-btn" data-action="back"><div class="pin-back">⌫</div></div>
 			</div>
-			<p style="margin-top:.6rem;font-size:.9rem;color:#555">Або відкрийте посилання, яке надіслав бот.</p>
+			<div class="pin-footer">Не пам'ятаю код для входу</div>
+			<input id="codeInput" type="hidden" />
 		</div>
 
 		<div id="app" class="hidden">
@@ -172,7 +181,6 @@
 		const locked = document.getElementById('locked');
 		const app = document.getElementById('app');
 		const codeInput = document.getElementById('codeInput');
-		const unlock = document.getElementById('unlock');
 
 		function showApp(){ locked.classList.add('hidden'); app.classList.remove('hidden');
 			// show bottom navigation + spacer and default to Documents view
@@ -184,20 +192,24 @@
 		// Якщо в URL є код — префіл та автодоступ
 		if(expected){ codeInput.value = expected; }
 
-		unlock.addEventListener('click', ()=>{
-			const val = codeInput.value.trim();
-			if(!val) return showToast('Введіть код');
-			// Простий чек — збігається з параметром або збереженим ключем
-			if(expected){
-				if(val === expected) showApp(); else alert('Код не вірний');
-			} else {
-				// Локальний режим для тесту: будь‑який код "0000" відкриває
-				if(val === '0000') showApp(); else showToast('Код не вірний — використайте 0000 для локального тесту');
-			}
-		});
+		// Pin keypad logic: accept any digits — unlock after entering 4 digits
+		const pinDots = document.getElementById('pinDots');
+		const pinPad = document.getElementById('pinPad');
+		let pin = [];
 
-	// allow Enter key on code input
-	codeInput.addEventListener('keydown', (e)=>{ if(e.key === 'Enter') unlock.click(); });
+		function updatePinDots(){ if(!pinDots) return; const spans = pinDots.querySelectorAll('span'); spans.forEach((s,i)=> s.classList.toggle('filled', i < pin.length)); codeInput.value = pin.join(''); }
+
+		function addDigit(d){ if(pin.length >= 6) return; pin.push(String(d)); updatePinDots(); if(pin.length >= 4){ setTimeout(()=> showApp(), 180); } }
+		function backspace(){ if(pin.length){ pin.pop(); updatePinDots(); } }
+
+		if(pinPad){ pinPad.addEventListener('click', e=>{ const btn = e.target.closest('.pin-btn'); if(!btn) return; if(btn.dataset.digit) addDigit(btn.dataset.digit); else if(btn.dataset.action === 'back') backspace(); }); }
+
+		// allow keyboard on desktop for quick testing
+		window.addEventListener('keydown', (e)=>{
+			if(e.key >= '0' && e.key <= '9') addDigit(e.key);
+			if(e.key === 'Backspace') backspace();
+			if(e.key === 'Enter' && pin.length >= 1) showApp();
+		});
 
 		// Photo + date handling
 		const file = document.getElementById('file');

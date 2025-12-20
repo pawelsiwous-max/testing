@@ -1,4 +1,4 @@
-const CACHE_NAME = 'fake-dia-newfile';
+const CACHE_NAME = 'fake-dia-addpassword';
 
 const FILES_TO_CACHE = [
   './',
