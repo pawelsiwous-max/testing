@@ -10,7 +10,7 @@
 <body>
 	<div class="card hidden" id="installNotice">
 		<div class="notice">
-			Ця сторінка працює краще як програма. Додайте на головний екран (через меню ⋮ → "Додати на головний екран").
+			Встановіть як додаток
 			<div style="margin-top:.5rem"><button id="installBtn" class="btn btn--primary hidden">Встановити</button></div>
 		</div>
 	</div>
@@ -124,8 +124,20 @@
 				</div>
 			</section>
 			<section id="feedView" class="hidden">
-				<h2 style="margin:1rem">Стрічка</h2>
-				<p style="margin:1rem">Placeholder for feed.</p>
+				<header style="padding:1rem 1rem 0">
+					<h2 style="margin:0;font-size:1.6rem">Привіт, Павло 👋</h2>
+				</header>
+				<section style="padding:1rem">
+					<div class="card" style="padding:1rem;border-radius:14px;background:linear-gradient(90deg,#0b5cff,#00a86b);color:#fff;margin-bottom:1rem">
+						<div style="font-weight:700;font-size:1.1rem">Дія.Картка</div>
+						<div style="opacity:0.9;margin-top:.6rem">Єдина картка українця</div>
+						<div style="margin-top:.8rem;text-align:left;font-weight:700">Відкрити картку →</div>
+					</div>
+					<div class="card" style="padding:1rem;border-radius:14px;margin-bottom:1rem">
+						<h3 style="margin:0 0 .5rem">Незламність</h3>
+						<p style="margin:0;color:var(--muted)">Мапа Пунктів Незламності та укриттів. Заява про відсутній зв'язок.</p>
+					</div>
+				</section>
 			</section>
 			<section id="menuView" class="hidden">
 				<h2 style="margin:1rem">Меню</h2>
@@ -189,7 +201,8 @@
 			// restore page scrolling and ensure view is at top
 			document.body.classList.remove('no-scroll');
 			window.scrollTo(0,0);
-			showView('docs');
+			// open main feed as landing (like app behaviour)
+			showView('feed');
 		}
 
 		// Якщо в URL є код — префіл та автодоступ
@@ -412,6 +425,10 @@
 				document.getElementById('menuView').classList.toggle('hidden', name!=='menu');
 				// if switching to documents, ensure carousel active
 				if(name==='docs') setActive(active);
+				// highlight bottom nav
+				const map = {feed: 'navFeed', docs: 'navDocs', services: 'navServices', menu: 'navMenu'};
+				Object.values(map).forEach(id=> document.getElementById(id).classList.remove('active'));
+				const activeId = map[name]; if(activeId) document.getElementById(activeId).classList.add('active');
 			}
 
 			const navFeed = document.getElementById('navFeed');
