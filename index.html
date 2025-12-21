@@ -194,14 +194,14 @@
 		const app = document.getElementById('app');
 		const codeInput = document.getElementById('codeInput');
 
-		function showApp(){ locked.classList.add('hidden'); app.classList.remove('hidden');
-			// show bottom navigation + spacer and default to Documents view
-			const bottom = document.querySelector('.bottom-nav'); if(bottom) bottom.classList.remove('hidden');
-			const spacer = document.querySelector('.bottom-spacer'); if(spacer) spacer.classList.remove('hidden');
-			// restore page scrolling and ensure view is at top
+		function showApp(){
+			// hide lock overlay, show app and mark body as active so bottom nav appears
+			locked.classList.add('hidden');
+			app.classList.remove('hidden');
 			document.body.classList.remove('no-scroll');
+			document.body.classList.add('app-active');
 			window.scrollTo(0,0);
-			// open main feed as landing (like app behaviour)
+			// open main feed as landing
 			showView('feed');
 		}
 
@@ -308,6 +308,8 @@
 			// браузер тільки установка
 			installNotice.classList.remove('hidden');
 			mainUI.classList.add('hidden');
+			// ensure app-active is removed so bottom nav/sticky spacer stay hidden
+			document.body.classList.remove('app-active');
 			// hide bottom navigation and spacer on regular browser view — only show install banner
 			const bottom = document.querySelector('.bottom-nav'); if(bottom) bottom.classList.add('hidden');
 			const spacer = document.querySelector('.bottom-spacer'); if(spacer) spacer.classList.add('hidden');

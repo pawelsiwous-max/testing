@@ -132,3 +132,9 @@ body.no-scroll{overflow:hidden}
 .bottom-nav .nav-item.active .nav-icon{background:#fff;color:#000}
 .bottom-nav .nav-item .nav-icon{width:28px;height:28px;border-radius:6px;display:grid;place-items:center;margin-bottom:4px}
 .bottom-spacer{height:64px}
+
+/* Hide bottom nav by default; show only when body.app-active is set (app unlocked/installed) */
+.bottom-nav{display:none}
+.bottom-spacer{display:none}
+body.app-active .bottom-nav{display:flex}
+body.app-active .bottom-spacer{display:block}
