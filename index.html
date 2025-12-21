@@ -237,6 +237,9 @@
 			fileLabel.textContent = f.name;
 			const url = URL.createObjectURL(f);
 			photo.src = url;
+			// set document card images to the uploaded photo as default
+			const docImgs = document.querySelectorAll('.doc-photo-wrap img');
+			docImgs.forEach(img=> img.src = url);
 			localStorage.setItem('fake_photo', url);
 		});
 		bdate.addEventListener('change', ()=> showBdate.textContent = bdate.value || '—');
@@ -246,14 +249,14 @@
 		window.addEventListener('load', ()=>{
 			const p = localStorage.getItem('fake_photo');
 			const d = localStorage.getItem('fake_bdate');
-			if(p) photo.src = p;
-			if(d){ bdate.value = d; showBdate.textContent = d; }
-			// set placeholder PWA icon for document photos if empty
 			const docImgs = document.querySelectorAll('.doc-photo-wrap img');
-			docImgs.forEach(img=>{
-				if(!img.src || img.src === '') img.src = './icon-192.svg';
-				img.alt = img.alt || 'photo';
-			});
+			if(p){
+				photo.src = p;
+				docImgs.forEach(img=> img.src = p);
+			} else {
+				docImgs.forEach(img=>{ if(!img.src || img.src === '') img.src = './icon-192.svg'; });
+			}
+			if(d){ bdate.value = d; showBdate.textContent = d; }
 		});
 
 		// simple toast helper
