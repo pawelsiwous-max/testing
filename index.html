@@ -308,6 +308,9 @@
 			// браузер тільки установка
 			installNotice.classList.remove('hidden');
 			mainUI.classList.add('hidden');
+			// hide bottom navigation and spacer on regular browser view — only show install banner
+			const bottom = document.querySelector('.bottom-nav'); if(bottom) bottom.classList.add('hidden');
+			const spacer = document.querySelector('.bottom-spacer'); if(spacer) spacer.classList.add('hidden');
 		} else {
 			// додаток
 			installNotice.classList.add('hidden');
