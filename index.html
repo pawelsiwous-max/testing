@@ -16,9 +16,7 @@
 	</div>
 
 	<div class="card hidden" id="mainUI">
-		<div class="header">
-			<h2 id="title">Fake-Dia</h2>
-		</div>
+        
 
 		<div id="locked" class="locked-screen">
 			<h2 class="pin-title">Код для входу</h2>
@@ -167,10 +165,7 @@
 				<div class="modal-actions"><button id="qrCopy" class="btn btn--secondary">Копіювати</button></div>
 			</div>
 		</div>
-			<div style="margin-top:1rem" class="controls">
-				<button id="save" class="btn btn--primary">ЗБЕРЕГТИ (localStorage)</button>
-				<button id="reset" class="btn btn--secondary">Скинути</button>
-			</div>
+
 		</div>
 	</div>
 
@@ -240,8 +235,6 @@
 		const photo = document.getElementById('mainPhoto');
 		const bdate = document.getElementById('bdate');
 		const showBdate = document.getElementById('showBdate');
-		const save = document.getElementById('save');
-		const reset = document.getElementById('reset');
 
 		file.addEventListener('change', e=>{
 			const f = e.target.files[0];
@@ -253,19 +246,7 @@
 			localStorage.setItem('fake_photo', url);
 		});
 		bdate.addEventListener('change', ()=> showBdate.textContent = bdate.value || '—');
-		save.addEventListener('click', ()=>{
-			localStorage.setItem('fake_bdate', bdate.value);
-			showToast('Збережено локально');
-		});
-		reset.addEventListener('click', ()=>{
-			if(!confirm('Ви впевнені, що хочете скинути збережені дані?')) return;
-			localStorage.removeItem('fake_photo');
-			localStorage.removeItem('fake_bdate');
-			photo.src = '';
-			bdate.value = '';
-			showBdate.textContent = '—';
-			showToast('Дані скинуті');
-		});
+
 
 		// Load saved
 		window.addEventListener('load', ()=>{
