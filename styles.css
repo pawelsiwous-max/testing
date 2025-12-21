@@ -120,8 +120,10 @@ body.no-scroll{overflow:hidden}
 .modal-actions{display:flex;justify-content:center;padding-top:.8rem}
 
 .services-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1rem}
-.service{background:linear-gradient(180deg,#f3fbff,#eef7ef);padding:1rem;border-radius:12px;display:flex;align-items:center;gap:.8rem;min-height:86px}
-.service .icon{width:44px;height:44px;border-radius:10px;background:#fff;display:grid;place-items:center}
+.services-grid{grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:12px}
+.service{background:linear-gradient(180deg,#f3fbff,#eef7ef);padding:0.9rem;border-radius:12px;display:flex;align-items:flex-start;gap:.6rem;min-height:0;box-sizing:border-box}
+.service .icon{width:44px;height:44px;border-radius:10px;background:#fff;display:grid;place-items:center;flex-shrink:0}
+.service .label{font-weight:600;font-size:.95rem}
 .service .label{font-weight:600}
 
 /* Bottom navigation */

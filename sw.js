@@ -1,4 +1,4 @@
-const CACHE_NAME = 'fake-dia-remake-documents-v2';
+const CACHE_NAME = 'fake-dia-remake-servises-v1';
 
 const FILES_TO_CACHE = [
   './',
