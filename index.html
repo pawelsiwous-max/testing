@@ -195,14 +195,20 @@
 		const codeInput = document.getElementById('codeInput');
 
 		function showApp(){
-			// hide lock overlay, show app and mark body as active so bottom nav appears
-			locked.classList.add('hidden');
-			app.classList.remove('hidden');
-			document.body.classList.remove('no-scroll');
-			document.body.classList.add('app-active');
-			window.scrollTo(0,0);
-			// open main feed as landing
-			showView('feed');
+			// Fade out and remove the lock overlay so underlying app is revealed
+			try{
+				locked.style.transition = 'opacity .22s ease';
+				locked.style.opacity = '0';
+			}catch(e){}
+			// After fade, remove element and enable app UI
+			setTimeout(()=>{
+				try{ locked.remove(); }catch(e){ locked.classList.add('hidden'); }
+				app.classList.remove('hidden');
+				document.body.classList.remove('no-scroll');
+				document.body.classList.add('app-active');
+				window.scrollTo(0,0);
+				showView('feed');
+			}, 240);
 		}
 
 		// Якщо в URL є код — префіл та автодоступ
