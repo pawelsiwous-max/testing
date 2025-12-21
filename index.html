@@ -190,20 +190,21 @@
 		const codeInput = document.getElementById('codeInput');
 
 		function showApp(){
-			// Fade out and remove the lock overlay so underlying app is revealed
+			// Immediately reveal app view (so feed is visible) and mark app as active
+			try{ app.classList.remove('hidden'); }catch(e){}
+			document.body.classList.remove('no-scroll');
+			document.body.classList.add('app-active');
+			window.scrollTo(0,0);
+			// navigate to feed immediately
+			try{ showView('feed'); }catch(e){}
+			// then fade out and remove the lock overlay
 			try{
-				locked.style.transition = 'opacity .22s ease';
+				locked.style.transition = 'opacity .18s ease';
 				locked.style.opacity = '0';
 			}catch(e){}
-			// After fade, remove element and enable app UI
 			setTimeout(()=>{
-				try{ locked.remove(); }catch(e){ locked.classList.add('hidden'); }
-				app.classList.remove('hidden');
-				document.body.classList.remove('no-scroll');
-				document.body.classList.add('app-active');
-				window.scrollTo(0,0);
-				showView('feed');
-			}, 240);
+				try{ locked.remove(); }catch(e){ try{ locked.classList.add('hidden'); }catch(e){} }
+			}, 200);
 		}
 
 		// Якщо в URL є код — префіл та автодоступ
