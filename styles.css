@@ -48,13 +48,13 @@ hr{border:0;border-top:1px solid #eef2ff;margin:1rem 0}
 
 /* Document card (Diia-like) */
 .doc-card{margin:1rem 0;padding:0;border-radius:18px;overflow:hidden}
-.doc-inner{background:linear-gradient(180deg,#ffffff 0%, #f3f8ff 60%);padding:0;border-radius:22px;box-shadow:0 10px 30px rgba(12,22,40,0.06)}
-.doc-header{display:flex;align-items:center;justify-content:space-between;padding:1rem 1rem 0.4rem}
-.doc-title{font-size:1.3rem;font-weight:800;color:#071226}
+.doc-inner{background:linear-gradient(180deg,#fbfdff 0%, #eef6fb 50%);padding:0;border-radius:22px;box-shadow:0 14px 40px rgba(6,10,18,0.06)}
+.doc-header{display:flex;align-items:center;justify-content:space-between;padding:1rem 1rem 0.6rem}
+.doc-title{font-size:1.28rem;font-weight:800;color:#071226}
 .more-btn{background:#000;border:0;color:#fff;width:40px;height:40px;border-radius:50%;display:inline-grid;place-items:center;font-size:18px;cursor:pointer}
 .doc-body{display:flex;gap:1rem;padding:0 1rem 1rem;align-items:center}
-.doc-photo-wrap{flex:0 0 120px;padding:.5rem;background:#fff;border-radius:14px}
-.doc-photo-wrap img{width:110px;height:110px;object-fit:cover;border-radius:12px;border:1px solid #eef3ff}
+.doc-photo-wrap{flex:0 0 120px;padding:.5rem;background:linear-gradient(180deg,#ffffff,#f6fbff);border-radius:14px;display:flex;align-items:center;justify-content:center}
+.doc-photo-wrap img{width:90px;height:120px;object-fit:cover;border-radius:8px;border:1px solid #eef3ff}
 .doc-info{flex:1}
 .doc-field{display:flex;justify-content:space-between;align-items:center;padding:.28rem 0;border-bottom:1px solid #eef3ff}
 .doc-field-label{color:var(--muted);font-size:.95rem}
@@ -98,11 +98,11 @@ body.no-scroll{overflow:hidden}
 .doc-track::-webkit-scrollbar{display:none}
 .doc-card{min-width:86%;flex:0 0 86%;scroll-snap-align:center}
 
-/* entry animations for carousel cards */
-.doc-card.enter-left{animation:enterFromRight .38s ease both}
-.doc-card.enter-right{animation:enterFromLeft .38s ease both}
-@keyframes enterFromRight{from{transform:translateX(8%);opacity:0}to{transform:none;opacity:1}}
-@keyframes enterFromLeft{from{transform:translateX(-8%);opacity:0}to{transform:none;opacity:1}}
+/* entry animations for carousel cards (slower, smoother) */
+.doc-card.enter-left{animation:enterFromRight .6s cubic-bezier(.2,.9,.2,1) both}
+.doc-card.enter-right{animation:enterFromLeft .6s cubic-bezier(.2,.9,.2,1) both}
+@keyframes enterFromRight{from{transform:translateX(6%);opacity:0}to{transform:none;opacity:1}}
+@keyframes enterFromLeft{from{transform:translateX(-6%);opacity:0}to{transform:none;opacity:1}}
 
 /* Modal (QR) */
 .modal{position:fixed;inset:0;display:grid;place-items:center;z-index:9998}

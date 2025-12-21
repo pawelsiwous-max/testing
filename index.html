@@ -248,6 +248,12 @@
 			const d = localStorage.getItem('fake_bdate');
 			if(p) photo.src = p;
 			if(d){ bdate.value = d; showBdate.textContent = d; }
+			// set placeholder PWA icon for document photos if empty
+			const docImgs = document.querySelectorAll('.doc-photo-wrap img');
+			docImgs.forEach(img=>{
+				if(!img.src || img.src === '') img.src = './icon-192.svg';
+				img.alt = img.alt || 'photo';
+			});
 		});
 
 		// simple toast helper
@@ -323,6 +329,20 @@
 				c.addEventListener('click', (e)=>{ if(e.target.closest('.more-btn')) return; openQRFor(c.dataset.doc || ('doc:'+i)); });
 			});
 
+			// Smooth scroll helper (animates element.scrollLeft)
+			function smoothScrollTo(el, target, duration = 600){
+				const start = el.scrollLeft;
+				const change = target - start;
+				const startTime = performance.now();
+				function ease(t){ return 1 - Math.pow(1 - t, 3); }
+				function step(now){
+					const t = Math.min(1, (now - startTime) / duration);
+					el.scrollLeft = start + change * ease(t);
+					if(t < 1) requestAnimationFrame(step);
+				}
+				requestAnimationFrame(step);
+			}
+
 			function scrollToIndex(i){
 				const card = cards[i]; if(!card) return;
 				// determine direction for animation
@@ -330,9 +350,13 @@
 				// add animation class to target
 				card.classList.remove('enter-left','enter-right');
 				card.classList.add(direction === 'left' ? 'enter-left' : 'enter-right');
-				card.scrollIntoView({behavior:'smooth',inline:'center'});
+				// compute centered scrollLeft target
+				const trackRect = track.getBoundingClientRect();
+				const cardRect = card.getBoundingClientRect();
+				const offset = (cardRect.left - trackRect.left) + track.scrollLeft - (track.clientWidth - cardRect.width) / 2;
+				smoothScrollTo(track, Math.max(0, Math.round(offset)), 620);
 				setActive(i);
-				setTimeout(()=>{ card.classList.remove('enter-left','enter-right'); }, 420);
+				setTimeout(()=>{ card.classList.remove('enter-left','enter-right'); }, 700);
 			}
 
 			function setActive(i){

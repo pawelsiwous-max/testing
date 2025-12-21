@@ -1,4 +1,4 @@
-const CACHE_NAME = 'fake-dia-tp-in-strichka-v1';
+const CACHE_NAME = 'fake-dia-remake-documents-v1';
 
 const FILES_TO_CACHE = [
   './',
